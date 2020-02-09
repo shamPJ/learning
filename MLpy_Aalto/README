@@ -1,0 +1,23 @@
+Course:
+CS-EJ3211 - Machine Learning with Python, 07.01.2020-03.04.2020
+
+Round 1 - Components of ML
+
+Machine learning methods consist of (at least) three components: 
+- data
+- a hypothesis space
+- some loss function
+
+Data:
+       huge collections of elementary units of information which we call data points
+Features of a data point:
+       easily quiantified props of a data point (e.g. the average brightness of an image) 
+Label of a data point:
+       quantity of interest 
+       higher-level fact about a data point (e.g., if an image is containing a road marking or not)
+
+Hypothesis space of a machine learning method:
+       collects different hypotheses (or models) for how the data is generated. 
+       E.g.: a hypothesis could model the relation between the features (which can be measured easily) and the label (the quantity of interest) of a data point
+Loss function:
+       is used to evaluate the quality of a particular hypothesis and, in turn, to choose between alternative hypotheses
