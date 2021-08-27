@@ -1,7 +1,7 @@
 import os
 import sys
 
-# ys.argv is a list in Python, which contains the command-line arguments passed to the script.
+# sys.argv is a list in Python, which contains the command-line arguments passed to the script.
 # With the len(sys.argv) function you can count the number of arguments.
 
 if len(sys.argv) > 2:
@@ -19,3 +19,14 @@ if not os.path.isdir(input_path):
     sys.exit()
 
 print('\n'.join(os.listdir(input_path)))
+
+# shell commands:
+# $ python myls.py
+# You need to specify the path to be listed
+
+# $ python myls.py /mnt /proc /dev
+# You have specified too many arguments
+
+# $ python myls.py /mnt
+# dir1
+# dir2
