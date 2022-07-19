@@ -66,7 +66,7 @@ P2P architectures cons:
 - challenge to secure
 - The success of P2P applications depends on convincing users to volunteer bandwidth, storage, and computation resources to the apps, which is the challenge of incentive design 
 
-### 2.1.2 Processes Communicating
+### :small_blue_diamond: 2.1.2 Processes Communicating
 
 **A process** - a program that is running within an end system. When processes are running on the same end system, they can communicate with each other with interprocess communication, using rules that are governed by the end system’s operating system.
 
