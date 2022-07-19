@@ -2,7 +2,7 @@
 
 Main driving force to dev Inet - creation of applications:
 
-- text email, remote access to computers, file trans- fers, and newsgroups
+- text email, remote access to computers, file transfers, and newsgroups
 - World Wide Web:
     - Web surfing
     - search
@@ -18,19 +18,19 @@ Main driving force to dev Inet - creation of applications:
 - multi-player online games
 - social networking applications (Facebook, Twitter)
 
-## 2.1 Principles of Network Applications
+## 2.1 Principles of Network Applications :large_blue_circle:
 
 Network application dev - write programs that:
 1. run on different end systems 
 2. communicate with each other over the network
 
-Web apps:
+For example, Web apps:
 1. the browser program running in the user’s host (desktop, laptop, tablet, smartphone, and so on)
 2. the Web server program running in the Web server host
 
 You do not need to (and actually can not) write software that runs on network core devices, such as routers or link-layer switches - they do not function at the application layer but instead function at lower layers.
 
-### 2.1.1. Network Apps Architectures
+### 2.1.1. Network Apps Architectures :small_blue_diamond:
 
 Two predominant architectural paradigms used in modern network applications: 
 - the client-server architecture 
@@ -68,7 +68,7 @@ P2P architectures cons:
 
 ### 2.1.2 Processes Communicating
 
-A process - a program that is running within an end system. When processes are running on the same end system, they can communicate with each other with interprocess communication, using rules that are governed by the end system’s operating system.
+**A process** - a program that is running within an end system. When processes are running on the same end system, they can communicate with each other with interprocess communication, using rules that are governed by the end system’s operating system.
 
 Processes on two different end systems communicate with each other by exchanging **messages** across the computer network. A sending process creates and sends messages into the network; a receiving process receives these messages and possibly responds by sending messages back.
 
@@ -94,8 +94,8 @@ The application developer has control of everything on the app-layer side of the
 
 In order for a process running on one host to send packets to a process running on another host, the receiving process needs to have an address.
 
-To identify the receiving process, two pieces of information need to be specified: 1. the address of the host -  IP address
-2. an identifier that specifies the receiving process  (more specifically, the receiving socket) in the destination host - destination **port number** serves this purpose.
+To identify the receiving process, two pieces of information need to be specified: (1) the address of the host -  IP address
+(2) an identifier that specifies the receiving process  (more specifically, the receiving socket) in the destination host - destination **port number** serves this purpose.
 
 Web server is identified by port number 80; A mail server process (using the SMTP protocol) is identified by port number 25. 
 
@@ -149,7 +149,7 @@ The TCP service model includes a connection-oriented service and a reliable data
 
 - **Connection-oriented service**  
     **Handshaking procedure**:
-    - TCP has the client and server exchange transportlayer control information with each other before the app-level messages begin to flow.
+    - TCP has the client and server exchange transport layer control information with each other before the app-level messages begin to flow.
     - Alerts the client and server, allowing them to prepare for an onslaught of packets. After the handshaking phase, a TCP connection is said to exist between the sockets of the two processes.
     - The connection is a full-duplex connection in that the two processes can send messages to each other over the connection at the same time. 
     - When the application finishes sending messages, it must tear down the connection. 
@@ -188,7 +188,7 @@ messages
 
 App-layer protocols:
 
-- public (HTTp)
+- public (HTTP)
 - proprietary (Skype)
 
 Network applications vs application-layer protocols:
@@ -207,3 +207,21 @@ Internet e-mail app:
 
 
 ## 2.2 The Web and HTTP
+
+Until the early 1990s the Internet was used by researchers, academics, and university students to log in to remote hosts, to transfer files from local hosts to remote hosts and vice versa, to receive and send news, and to receive and send electronic mail.\
+2003 - YouTube, Gmail, and Facebook.
+
+
+### 2.2.1 Overview of HTTP
+
+HTTP is implemented in two programs: (1) a client program and (2) a server program. They talk to each other by exchanging HTTP messages. HTTP defines the structure of these messages and how the client and server exchange the messages.
+
+A Web page ( document) consists of objects. An object is simply a file (HTML file, a JPEG image, a Java applet, a video clip)—that is addressable by a single URL. Most Web pages consist of a base HTML file and several referenced objects. For example, if a Web page contains HTML text and five JPEG images, then the Web page has six objects: the base HTML file plus the five images. The base HTML file references the other objects in the page with the objects’ URLs. Each URL has two components: the hostname of the server that houses the object and the object’s path name. For example, the URL
+http://www.someSchool.edu/someDepartment/picture.gif
+has www.someSchool.edu for a hostname and /someDepartment/ picture.gif for a path name. 
+Web browsers (Internet Explorer,Firefox) - implement the client side of HTTP --> we will use the words browser and client interchangeably. 
+Web servers - implement the server side of HTTP, house Web objects, each addressable by a URL. Popular Web servers include Apache and Microsoft Internet Information Server.
+
+ HTTP server maintains no info about the clients - **stateless protocol**. 
+
+ ### 2.2.2 Non-Persistent and Persistent Connections
