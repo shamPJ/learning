@@ -18,7 +18,7 @@ Main driving force to dev Inet - creation of applications:
 - multi-player online games
 - social networking applications (Facebook, Twitter)
 
-## :large_green_circle: 2.1 Principles of Network Applications 
+## :green_circle: 2.1 Principles of Network Applications 
 
 Network application dev - write programs that:
 1. run on different end systems 
@@ -206,7 +206,7 @@ Internet e-mail app:
 -  and app-layer protocols that define how messages are passed between servers, how messages are passed between servers and mail clients, and how the contents of message headers are to be interpreted. e.g. **SMTP (Simple Mail Transfer Protocol)**
 
 
-## 2.2 :large_green_circle: The Web and HTTP
+## 2.2 :green_circle: The Web and HTTP
 
 Until the early 1990s the Internet was used by researchers, academics, and university students to log in to remote hosts, to transfer files from local hosts to remote hosts and vice versa, to receive and send news, and to receive and send electronic mail.\
 2003 - YouTube, Gmail, and Facebook.
@@ -222,11 +222,11 @@ has www.someSchool.edu for a hostname and /someDepartment/ picture.gif for a pat
 Web browsers (Internet Explorer,Firefox) - implement the client side of HTTP --> we will use the words browser and client interchangeably. 
 Web servers - implement the server side of HTTP, house Web objects, each addressable by a URL. Popular Web servers include Apache and Microsoft Internet Information Server.
 
- HTTP server maintains no info about the clients - **stateless protocol**. 
+HTTP server maintains no info about the clients - **stateless protocol**. 
 
- ### :small_blue_diamond: 2.2.2 Non-Persistent and Persistent Connections
- 
- **Non-persistent connections** - each request/response pair be sent over a separate TCP connection.
+### :small_blue_diamond: 2.2.2 Non-Persistent and Persistent Connections
+
+**Non-persistent connections** - each request/response pair be sent over a separate TCP connection.
 **Persistent connections** - all of the requests and their corresponding responses be sent over the same TCP connection.
 
 HTTP uses persistent connections in its default mode, but HTTP clients and servers can be configured to use non-persistent connections instead.
@@ -276,7 +276,7 @@ These requests for objects can be made back-to-back, without waiting for replies
 
 The default mode of HTTP uses persistent connections with pipelining.
 
- ### :small_blue_diamond: 2.2.3 HTTP Message Format
+### :small_blue_diamond: 2.2.3 HTTP Message Format
 
 **HTTP Request Message**
 
@@ -358,6 +358,68 @@ nc netcat - Read and write data across networks - arbitrary TCP and UDP connecti
 
 How header lines are selected?
 
- A browser will generate header lines as a function of the browser type and version (for example, an HTTP/1.0 browser will not generate any 1.1 header lines), the user configuration of the browser (for example, preferred language), and whether the browser currently has a cached, but possibly out-of-date, version of the object. Web servers behave similarly: There are different products, versions, and configurations, all of which influence which header lines are included in response messages.
+A browser will generate header lines as a function of the browser type and version (for example, an HTTP/1.0 browser will not generate any 1.1 header lines), the user configuration of the browser (for example, preferred language), and whether the browser currently has a cached, but possibly out-of-date, version of the object. Web servers behave similarly: There are different products, versions, and configurations, all of which influence which header lines are included in response messages.
 
-  ### :small_blue_diamond: 2.2.4 User-Server Interaction: Cookies
+### :small_blue_diamond: 2.2.4 User-Server Interaction: Cookies
+
+HTTP server is stateless.However, it is often desirable for a Web site to identify users, either because the server wishes to restrict user access or because it wants to serve content as a function of the user identity --> HTTP uses cookies.
+**Cookies** allow sites to keep track of users. Most major commercial Web sites use cookies today.
+
+Cookie technology has four components: 
+- (1) a cookie header line in the HTTP response message; 
+- (2) a cookie header line in the HTTP request message; 
+- (3) a cookie file kept on the user’s end system and managed by the user’s browser; 
+- (4) a cookie file  managed by a back-end database at the Web site. 
+
+![This is an image](2.10.png)
+
+...As Susan continues to browse the Amazon site, each time she requests a Web page, her browser consults her cookie file, extracts her identification number for this site, and puts a cookie header line that includes the identification number in the HTTP request.
+
+In this manner, the Amazon server is able to track Susan’s activity at the Amazon site. It knows exactly which pages user 1678 visited, in which order, and at what times! Amazon uses cookies to provide its shopping cart service—Amazon can maintain a list of all of Susan’s intended purchases, so that she can pay for them collectively at the end of the session.\
+If Susan also registers herself with Amazon—providing full name, e-mail address, postal address, and credit card info—Amazon can then include this information in its database, thereby associating Susan’s name with her identification number (and all of the pages she has visited at the site in the past!). **This is how Amazon and other e-commerce sites provide “one-click shopping”— when Susan chooses to purchase an item during a subsequent visit, she doesn’t need to re-enter her name, credit card number, or address.**
+
+Cookies can thus be used to create a user session layer on top of stateless HTTP. For example, when a user logs in to a Web-based e-mail application (such as Hotmail), the browser sends cookie info to the server, permitting the server to identify the user throughout the user’s session with the application.
+
+### :small_blue_diamond: 2.2.5 Web Caching
+
+A **Web cache** — also called a **proxy server** — is a network entity that satisfies HTTP requests on the behalf of an origin Web server. The Web cache has its own disk storage and keeps copies of recently requested objects in this storage. A user’s browser can be configured so that all of the user’s HTTP requests are first directed to the Web cache. Once a browser is configured, each browser request for an object is first directed to the Web cache:
+
+1. The browser establishes a TCP connection to the Web cache and sends an HTTP request for the object to the Web cache.
+2. The Web cache checks to see if it has a copy of the object stored locally. If it does, the Web cache returns the object within an HTTP response message to the client browser.
+3. If the Web cache does not have the object, the Web cache opens a TCP connection to the origin server. The Web cache then sends an HTTP request for the object into the cache-to-server TCP connection. After receiving this request, the origin server sends the object within an HTTP response to the Web cache.
+4. When the Web cache receives the object, it stores a copy in its local storage and sends a copy, within an HTTP response message, to the client browser (over the existing TCP connection between the client browser and the Web cache).
+
+
+Typically a Web cache is purchased and installed by an ISP. 
+- a Web cache can substantially reduce the response time for a client request, if there is a high-speed connection between the client and the cache, and if the cache has the requested object, then the cache will be able to deliver the object rapidly to the client. 
+- Web caches can substantially reduce traffic on an institution’s access link to the Internet --> reducing traffic, thereby reducing costs.
+
+**Content Distribution Network (CDN)** company installs many geographically distributed caches throughout the Internet, thereby localizing much of the traffic. There are shared CDNs (such as Akamai and Limelight) and dedicated CDNs (such as Google and Microsoft). 
+
+### :small_blue_diamond: 2.2.6 The Conditional GET
+
+A problem — the copy of an object residing in the cache may be stale,ie the object housed in the Web server may have been modified since the copy was cached at the client. \
+HTTP has a mechanism that allows a cache to verify that its objects are up to date - **the conditional GET**. 
+HTTP request message is a conditional GET message if (1) the request message uses the GET method and (2) the request message includes an If-Modified- Since: header line.\
+
+If object already cached: object may have been modified at the Web server, the cache performs an up-to-date check by issuing a conditional GET. The cache sends:
+
+GET /fruit/kiwi.gif HTTP/1.1 \
+Host: www.exotiquecuisine.com  \
+If-modified-since: Wed, 7 Sep 2011 09:23:24
+
+This conditional GET is telling the server to send the object only if the object has been modified since the specified date. 
+
+Suppose the object has not been modified since 7 Sep 2011 09:23:24. The Web server sends a response message to the cache:
+
+HTTP/1.1 304 Not Modified \
+Date: Sat, 15 Oct 2011 15:39:29 Server: Apache/1.3.0 (Unix) \
+(empty entity body)
+
+## :green_circle: 2.3 File Transfer: FTP
+
+
+
+
+
+
