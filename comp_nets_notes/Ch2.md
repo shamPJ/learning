@@ -18,7 +18,7 @@ Main driving force to dev Inet - creation of applications:
 - multi-player online games
 - social networking applications (Facebook, Twitter)
 
-## 2.1 Principles of Network Applications :large_blue_circle:
+## :large_green_circle: 2.1 Principles of Network Applications 
 
 Network application dev - write programs that:
 1. run on different end systems 
@@ -30,7 +30,7 @@ For example, Web apps:
 
 You do not need to (and actually can not) write software that runs on network core devices, such as routers or link-layer switches - they do not function at the application layer but instead function at lower layers.
 
-### 2.1.1. Network Apps Architectures :small_blue_diamond:
+### :small_blue_diamond: 2.1.1. Network Apps Architectures 
 
 Two predominant architectural paradigms used in modern network applications: 
 - the client-server architecture 
@@ -99,7 +99,7 @@ To identify the receiving process, two pieces of information need to be specifie
 
 Web server is identified by port number 80; A mail server process (using the SMTP protocol) is identified by port number 25. 
 
-### 2.1.3 Transport Services Available to Applications
+### :small_blue_diamond: 2.1.3 Transport Services Available to Applications
 
 Need to choose transport-layer protocol based on provided services:
 - reliable data transfer
@@ -135,7 +135,7 @@ Examples:
 - data integrity 
 - end-point authentication
 
-### 2.1.4 Transport Services Provided by the Internet
+### :small_blue_diamond: 2.1.4 Transport Services Provided by the Internet
 
 The Internet (and, more generally, TCP/IP networks) makes two transport protocols available to applications, UDP and TCP.
 
@@ -177,7 +177,7 @@ Many firewalls are configured to block (most types of) UDP traffic.
 
 ![This is an image](2.5.png)
 
-### 2.1.5 Application-Layer Protocols
+### :small_blue_diamond: 2.1.5 Application-Layer Protocols
 
 An application-layer protocol defines how an application’s processes, running on diff end systems, pass messages to each other:
 - The types of messages exchanged, for example, request messages and response messages
@@ -206,13 +206,13 @@ Internet e-mail app:
 -  and app-layer protocols that define how messages are passed between servers, how messages are passed between servers and mail clients, and how the contents of message headers are to be interpreted. e.g. **SMTP (Simple Mail Transfer Protocol)**
 
 
-## 2.2 The Web and HTTP
+## 2.2 :large_green_circle: The Web and HTTP
 
 Until the early 1990s the Internet was used by researchers, academics, and university students to log in to remote hosts, to transfer files from local hosts to remote hosts and vice versa, to receive and send news, and to receive and send electronic mail.\
 2003 - YouTube, Gmail, and Facebook.
 
 
-### 2.2.1 Overview of HTTP
+### :small_blue_diamond: 2.2.1 Overview of HTTP
 
 HTTP is implemented in two programs: (1) a client program and (2) a server program. They talk to each other by exchanging HTTP messages. HTTP defines the structure of these messages and how the client and server exchange the messages.
 
@@ -224,4 +224,140 @@ Web servers - implement the server side of HTTP, house Web objects, each address
 
  HTTP server maintains no info about the clients - **stateless protocol**. 
 
- ### 2.2.2 Non-Persistent and Persistent Connections
+ ### :small_blue_diamond: 2.2.2 Non-Persistent and Persistent Connections
+ 
+ **Non-persistent connections** - each request/response pair be sent over a separate TCP connection.
+**Persistent connections** - all of the requests and their corresponding responses be sent over the same TCP connection.
+
+HTTP uses persistent connections in its default mode, but HTTP clients and servers can be configured to use non-persistent connections instead.
+
+**HTTP with Non-Persistent Connections**
+
+Example: suppose the page consists of a base HTML file and 10 JPEG images, and that all 11 of these objects reside on the same server. URL for the base HTML file is
+http://www.someSchool.edu/someDepartment/home.index
+
+Here is what happens:
+1. The HTTP client process initiates a TCP connection to the server www.someSchool.edu on port number 80 (default port number for HTTP). Associated with the TCP connection, there will be a socket at the client and a socket at the server.
+2. The HTTP client sends an HTTP request message to the server via its socket.The request message includes the path name /someDepartment/home.index.
+3. The HTTP server process receives the request message via its socket, retrieves the object /someDepartment/home.index from its storage (RAM or disk), encapsulates the object in an HTTP response message, and sends the response message to the client via its socket.
+4. The HTTP server process tells TCP to close the TCP connection. (But TCP doesn’t actually terminate the connection until it knows for sure that the client has received the response message intact.)
+5. The HTTP client receives the response message. The TCP connection terminates. The message indicates that the encapsulated object is an HTML file. The client extracts the file from the response message, examines the HTML file, and finds references to the 10 JPEG objects.
+6. The first four steps are then repeated for each of the referenced JPEG objects.
+
+If non-persistent connections - each TCP connection is closed after the server sends the object—the connection does not persist for other objects. User requests the Web page --> 11 TCP connections are generated.
+
+**Round-trip time (RTT)**, - the time it takes for a small packet to travel from client to server and then back to the client. The RTT includes packet-propagation delays, packet- queuing delays in intermediate routers and switches, and packet-processing delays. 
+
+User clicks on a hyperlink:
+
+- the browser initiates a TCP connection between the browser and the Web server; this involves a “three-way handshake”—the client sends a small TCP segment to the server, the server acknowledges and responds with a small TCP segment, and, finally, the client acknowledges back to the server. The first two parts of the three-way handshake take one RTT. 
+
+- the client sends the HTTP request message combined with the third part of the three-way handshake (the acknowledgment) into the TCP connection. 
+
+- once the request message arrives at the server, the server sends the HTML file into the TCP connection. This HTTP request/response eats up another RTT. 
+
+Thus, roughly, the total response time is two RTTs plus the transmission time at the server of the HTML file.
+
+![This is an image](2.7.png)
+
+Cons:
+
+- for each of these connections, TCP buffers must be allocated and TCP variables must be kept in both the client and server. This can place a significant burden on the Web server, which may be serving requests from hundreds of different clients simultaneously. 
+- each object suffers a delivery delay of two RTTs — one RTT to establish the TCP connection and one RTT to request and receive an object.
+
+**HTTP with Persistent Connections**
+
+The server leaves the TCP connection open after sending a response. Subsequent requests and responses between the same client and server can be sent over the same connection. 
+
+- an entire Web page (in the example above, the base HTML file and the 10 images) can be sent over a single persistent TCP connection. 
+- multiple Web pages residing on the same server can be sent from the server to the same client over a single persistent TCP connection. 
+
+These requests for objects can be made back-to-back, without waiting for replies to pending requests (pipelining). Typically, the HTTP server closes a connection when it isn’t used for a certain time (a configurable timeout interval).
+
+The default mode of HTTP uses persistent connections with pipelining.
+
+ ### :small_blue_diamond: 2.2.3 HTTP Message Format
+
+**HTTP Request Message**
+
+Typical HTTP request message:
+
+GET /somedir/page.html HTTP/1.1 Host: www.someschool.edu\
+Connection: close \
+User-agent: Mozilla/5.0 \
+Accept-language: fr
+
+The first line of an HTTP request message is called **the request line**; the subsequent lines are called the header lines. There can be one or more lines.
+
+The request line has three fields: (1) the method field, (2) the URL field, and (3) the HTTP version field. The method field can take on several different values, including GET, POST, HEAD, PUT,and DELETE. The GET method is used when the browser requests an object. 
+
+Connection: close - non-persistent connections; the server closes the connection after sending the requested object.
+
+![This is an image](2.8.png)
+
+The entity body is empty with the GET method, but is used with the POST method. An HTTP client often uses the POST method when the user fills out a form—for example, when a user provides search words to a search engine. With a POST message, the user is still requesting a Web page from the server, but the specific contents of the Web page depend on what the user entered into the form fields.
+
+Note: can use input form + GET, e.g. search; form uses the GET method, has two fields, and the inputs to the two fields are monkeys and bananas, then the URL will have the structure www.somesite.com/animalsearch?monkeys&bananas. 
+
+HEAD - responds with an HTTP message but it leaves out the requested object. Application developers often use the HEAD method for debugging. 
+
+PUT - often used in conjunction with Web publishing tools. It allows a user to upload an object to a specific path on a specific Web server. The PUT method is also used by apps that need to upload objects to Web servers. 
+
+DELETE - allows a user, or an app, to delete an object on a Web server.
+
+**HTTP Response Message**
+
+HTTP/1.1 200 OK \
+Connection: close \
+Date: Tue, 09 Aug 2011 15:44:04 GMT \
+Server: Apache/2.2.3 (CentOS) \
+Last-Modified: Tue, 09 Aug 2011 15:11:03 GMT \
+Content-Length: 6821 \
+Content-Type: text/html \
+(data data data data data ...)
+
+1st line - **status line** (3 fields - the protocol version, a status code, a corresponding status message), six header lines, and then the entity body. 
+
+Date - when the HTTP response was created and sent by the server.
+
+Last-Modified - time and date when the object was created or last modified; critical for object caching, both in the local client and in network cache servers (also known as proxy servers).
+
+Content-Length -  header line indicates the number of bytes in the object being sent. 
+
+The Content-Type - header line indicates that the object in the entity body is HTML text. 
+
+Common status codes and associated phrases include:
+
+• 200 OK: Request succeeded and the information is returned in the response.
+
+• 301 Moved Permanently: Requested object has been permanently moved; the new URL is specified in Location:headeroftheresponsemessage.The client software will automatically retrieve the new URL.
+
+• 400 Bad Request: This is a generic error code indicating that the request could not be understood by the server.
+
+• 404 Not Found: The requested document does not exist on this server.
+
+• 505 HTTP Version Not Supported: The requested HTTP protocol
+version is not supported by the server.
+
+Sending manually GET request via terminal on Mac:
+
+printf "GET /~ross/ HTTP/1.1\r\nHost: cse.engineering.nyu.edu\r\nUser-Agent: curl/7.68.0\r\nAccept: */*\r\n\r\n" | nc cse.engineering.nyu.edu 80
+
+Output:
+HTTP/1.1 200 OK \
+Date: Wed, 20 Jul 2022 09:14:44 GMT \
+Server: Apache/2.4.6 \
+Last-Modified: Mon, 12 Nov 2018 16:25:17 GMT \
+ETag: "cf-57a7a257df256" \
+Accept-Ranges: bytes \
+Content-Length: 207 \
+Content-Type: text/html; charset=UTF-8 \
+...
+
+nc netcat - Read and write data across networks - arbitrary TCP and UDP connections and listens; (telnet was rm from Mac)
+
+How header lines are selected?
+
+ A browser will generate header lines as a function of the browser type and version (for example, an HTTP/1.0 browser will not generate any 1.1 header lines), the user configuration of the browser (for example, preferred language), and whether the browser currently has a cached, but possibly out-of-date, version of the object. Web servers behave similarly: There are different products, versions, and configurations, all of which influence which header lines are included in response messages.
+
+  ### :small_blue_diamond: 2.2.4 User-Server Interaction: Cookies
