@@ -206,7 +206,7 @@ Internet e-mail app:
 -  and app-layer protocols that define how messages are passed between servers, how messages are passed between servers and mail clients, and how the contents of message headers are to be interpreted. e.g. **SMTP (Simple Mail Transfer Protocol)**
 
 
-## 2.2 :green_circle: The Web and HTTP
+## :green_circle: 2.2 The Web and HTTP
 
 Until the early 1990s the Internet was used by researchers, academics, and university students to log in to remote hosts, to transfer files from local hosts to remote hosts and vice versa, to receive and send news, and to receive and send electronic mail.\
 2003 - YouTube, Gmail, and Facebook.
@@ -417,6 +417,49 @@ Date: Sat, 15 Oct 2011 15:39:29 Server: Apache/1.3.0 (Unix) \
 (empty entity body)
 
 ## :green_circle: 2.3 File Transfer: FTP
+
+- User (the local host) wants to transfer files to or from a remote host.
+- To access the remote account, the user must provide a user identification and a password.
+- User interacts with FTP through an **FTP user agent**. 
+
+1) Provide hostname ->  FTP client process in the local host starts -> establish a TCP connection with the FTP server process in the remote host. 
+
+2) Provide user identification and password -> sent over the TCP connection as part of FTP commands -> server authorized user -> user copies one or more files stored in the local file sys into the remote file sys (or vice versa).
+
+FTP uses two parallel TCP connections:
+
+1) **control connection**  - to send control information between the two hosts (user identification, password, commands to change remote directory, commands to “put” and “get” files)
+2) **data connection** - to send a file. 
+
+FTP uses a separate control connection - sends its control information **out-of-band**. 
+HTTP sends request and response header lines into the same TCP connection that carries the transferred file itself - sends its control information **in-band**. 
+
+- user first initiates a control TCP connection with remote host on server port number 21. 
+- user sends the user id and password over this control connection,commands to change the remote directory. 
+- host initiates a TCP data connection to the client side. 
+
+FTP sends exactly one file over the data connection and then closes the data connection. To transfer another file, FTP opens another data connection. Thus, with FTP, the control connection remains open throughout the duration of the user session, but a new data conn is created for each file transferred within a session (non-persistent conn).
+
+HTTP is stateless — does not have to keep track of any user state.\
+FTP server must maintain state about the user. The server must associate the control conn with a specific user account, and the server must keep track of the user’s current dir as the user wanders about the remote dir tree. \
+Keeping track of this state information for each ongoing user session significantly constrains the total number of sessions that FTP can maintain simultaneously. 
+
+### :small_blue_diamond: 2.3.1 FTP Commands and Replies
+
+The commands, from client to server, and replies, from server to client, are sent across the control conn in 7-bit ASCII format. Thus, like HTTP commands, FTP commands are readable by people. 
+
+- USER username: send the user id to the server.
+- PASS password: send the user password to the server.
+- LIST: ask the server to send back a list of all the files in the current remote dir. The list of files is sent over a (new and non-persistent) data connection rather than the control TCP connection.
+- RETR filename: retrieve (get) a file from the current dir of the remote host. This command causes the remote host to initiate a data conn and to send the requested file over the data conn.
+- STOR filename: store (put) a file into the current dir of the remote host.
+
+The replies are three-digit numbers, with an optional message following the number. This is similar in structure to the status code and phrase in the status line of the HTTP response message. Some typical replies, along with their possible messages, are as follows:
+- 331 Username OK, password required
+- 125 Data connection already open; transfer starting 
+- 425 Can’t open data connection
+- 452 Error writing file
+ 
 
 
 
